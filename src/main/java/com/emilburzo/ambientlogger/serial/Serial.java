@@ -88,22 +88,22 @@ public class Serial {
         int i = 0;
 
         try {
-            reading.id = Integer.valueOf(split[i++]);
+            reading.id = Integer.valueOf(split[i++].trim());
         } catch (Exception e) {
         }
 
         try {
-            reading.temperature = Double.valueOf(split[i++]);
+            reading.temperature = Double.valueOf(split[i++].trim());
         } catch (Exception e) {
         }
 
         try {
-            reading.humidity = Double.valueOf(split[i++]);
+            reading.humidity = Double.valueOf(split[i++].trim());
         } catch (Exception e) {
         }
 
         try {
-            reading.voltage = Integer.valueOf(split[i++]);
+            reading.voltage = Integer.valueOf(split[i++].trim());
         } catch (Exception e) {
         }
 
