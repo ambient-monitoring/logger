@@ -103,7 +103,7 @@ public class Serial {
         }
 
         try {
-            reading.voltage = Double.valueOf(split[i++]);
+            reading.voltage = Integer.valueOf(split[i++]);
         } catch (Exception e) {
         }
 
