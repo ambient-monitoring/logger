@@ -75,25 +75,35 @@ public class Serial {
     private Reading getReading(String decoded) {
         Reading reading = new Reading();
 
-        // id,temp,humidity
+        // id,temp,humidity,voltage
         // example:
-        // 1,24.53
-        // 2,24,39
+//        1,21.9,51.5,4137
+//        2,22.6,48.0,4361
+//        1,21.9,51.4,4137
+//        2,22.5,47.9,4361
+//        1,21.9,51.4,4137
 
         String[] split = decoded.split(VALUE_SEPARATOR);
 
+        int i = 0;
+
         try {
-            reading.id = Integer.valueOf(split[0]);
+            reading.id = Integer.valueOf(split[i++]);
         } catch (Exception e) {
         }
 
         try {
-            reading.temperature = Double.valueOf(split[1]);
+            reading.temperature = Double.valueOf(split[i++]);
         } catch (Exception e) {
         }
 
         try {
-            reading.humidity = Double.valueOf(split[2]);
+            reading.humidity = Double.valueOf(split[i++]);
+        } catch (Exception e) {
+        }
+
+        try {
+            reading.voltage = Double.valueOf(split[i++]);
         } catch (Exception e) {
         }
 
