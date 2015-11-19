@@ -16,6 +16,11 @@ public class Serial {
     private boolean stop = false;
 
     public Serial() {
+        // todo
+        // * retry connecting to mongodb if connection lost
+        // * retry connecting to the serial port if connection lost
+        // * ensure indexes are created
+
         SerialPort arduino = null;
 
         SerialPort[] commPorts = SerialPort.getCommPorts();
