@@ -11,7 +11,7 @@ public class MongoDB {
 
     static {
         if (client == null) {
-            client = new MongoClient("mongodb");
+            client = new MongoClient("ambient");
         }
     }
 
