@@ -72,6 +72,10 @@ public class Serial {
 
         Reading reading = getReading(decoded);
 
+        if (reading == null) {
+            return;
+        }
+
         String json = new Gson().toJson(reading);
 
         MongoDB.getReadingCollection().insertOne(Document.parse(json));
@@ -80,38 +84,25 @@ public class Serial {
     private Reading getReading(String decoded) {
         Reading reading = new Reading();
 
-        // id,temp,humidity,voltage
+        // th,id,temp,humidity,voltage,packet count
         // example:
-//        1,21.9,51.5,4137
-//        2,22.6,48.0,4361
-//        1,21.9,51.4,4137
-//        2,22.5,47.9,4361
-//        1,21.9,51.4,4137
+        // th,4,6.7,64.0,4361,44
 
         String[] split = decoded.split(VALUE_SEPARATOR);
 
         int i = 0;
 
-        try {
-            reading.id = Integer.valueOf(split[i++].trim());
-        } catch (Exception e) {
+        // sanity check
+        // todo use factories for different sensor types
+        if (!split[i++].equalsIgnoreCase("th")) {
+            return null;
         }
 
-        try {
-            reading.temperature = Double.valueOf(split[i++].trim());
-        } catch (Exception e) {
-        }
-
-        try {
-            reading.humidity = Double.valueOf(split[i++].trim());
-        } catch (Exception e) {
-        }
-
-        try {
-            reading.voltage = Integer.valueOf(split[i++].trim());
-        } catch (Exception e) {
-        }
-
+        reading.id = Integer.valueOf(split[i++].trim());
+        reading.temperature = Double.valueOf(split[i++].trim());
+        reading.humidity = Double.valueOf(split[i++].trim());
+        reading.voltage = Integer.valueOf(split[i++].trim());
+        reading.counter = Integer.valueOf(split[i++].trim());
         reading.timestamp = new Date().getTime();
 
         return reading;
