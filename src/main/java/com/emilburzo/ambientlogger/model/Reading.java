@@ -6,7 +6,7 @@ public class Reading {
     public Double temperature;
     public Double humidity;
     public Integer voltage;
-    public Long timestamp;
     public Integer counter;
+    public Long timestamp;
 
 }
