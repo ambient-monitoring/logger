@@ -16,54 +16,62 @@ public class Serial {
     private boolean stop = false;
 
     public Serial() {
-        // todo
-        // * retry connecting to mongodb if connection lost
-        // * retry connecting to the serial port if connection lost
-        // * ensure indexes are created
+        while (true) {
+            // todo
+            // * retry connecting to mongodb if connection lost
+            // * retry connecting to the serial port if connection lost
+            // * ensure indexes are created
 
-        SerialPort arduino = null;
+            SerialPort arduino = null;
 
-        SerialPort[] commPorts = SerialPort.getCommPorts();
+            SerialPort[] commPorts = SerialPort.getCommPorts();
 
-        int i = 0;
+            int i = 0;
 
-        for (SerialPort port : commPorts) {
-            System.out.println(String.format("[%d] %s (%s)", i, port.getSystemPortName(), port.getDescriptivePortName()));
+            for (SerialPort port : commPorts) {
+                System.out.println(String.format("[%d] %s (%s)", i, port.getSystemPortName(), port.getDescriptivePortName()));
 
-            if (port.getDescriptivePortName().equalsIgnoreCase(ARDUINO_DESCRIPTIVE_PORT_NAME)) {
-                arduino = port;
-                break;
-            }
-
-            i++;
-        }
-
-        if (arduino == null) {
-            System.out.println("Couldn't find Arduino on any port");
-            System.exit(1);
-        }
-
-        arduino.openPort();
-
-        try {
-            while (!stop) {
-                while (arduino.bytesAvailable() == 0) {
-                    Thread.sleep(20);
+                if (port.getDescriptivePortName().equalsIgnoreCase(ARDUINO_DESCRIPTIVE_PORT_NAME)) {
+                    arduino = port;
+                    break;
                 }
 
-                byte[] readBuffer = new byte[arduino.bytesAvailable()];
-                arduino.readBytes(readBuffer, readBuffer.length);
-
-                String decoded = new String(readBuffer, "UTF-8");
-
-                onReadingAvailable(decoded);
+                i++;
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            System.out.println("closing port");
 
-            arduino.closePort();
+            if (arduino == null) {
+                System.out.println("Couldn't find Arduino on any port");
+                System.exit(1);
+            }
+
+            arduino.openPort();
+
+            try {
+                while (!stop) {
+                    while (arduino.bytesAvailable() == 0) {
+                        Thread.sleep(20);
+                    }
+
+                    byte[] readBuffer = new byte[arduino.bytesAvailable()];
+                    arduino.readBytes(readBuffer, readBuffer.length);
+
+                    String decoded = new String(readBuffer, "UTF-8");
+
+                    onReadingAvailable(decoded);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                System.out.println("closing port");
+
+                arduino.closePort();
+            }
+
+            try {
+                Thread.sleep(10 * 1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 
