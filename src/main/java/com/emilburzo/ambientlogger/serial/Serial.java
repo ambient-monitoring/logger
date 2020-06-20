@@ -4,6 +4,7 @@ import com.emilburzo.ambientlogger.model.Reading;
 import com.emilburzo.ambientlogger.mongo.MongoDB;
 import com.fazecast.jSerialComm.SerialPort;
 import com.google.gson.Gson;
+import com.mongodb.MongoException;
 import org.bson.Document;
 
 import java.util.Date;
@@ -59,6 +60,10 @@ public class Serial {
 
                     onReadingAvailable(decoded);
                 }
+            } catch (MongoException e) {
+                e.printStackTrace();
+
+                System.exit(1);
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
